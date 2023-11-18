@@ -19,6 +19,6 @@ export class CreateBookDto {
   readonly author: string;
 
   @IsNotEmpty()
-  @IsEnum(Category, { message: 'please enter correct category' })
+  @IsEnum(Category, { message: 'please enter correct category here' })
   readonly category: Category;
 }
