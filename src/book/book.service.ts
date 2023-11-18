@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Book } from './schema/book.schema';
 import mongoose from 'mongoose';
@@ -44,15 +48,20 @@ export class BookService {
   // Get books by Id
   async getBookById(id: string): Promise<Book> {
     const isValidId = mongoose.isValidObjectId(id); // this will show if it i correct id or not
-    const findBook = await this.bookModel.findById(id);
-    if (!findBook) {
-      throw new NotFoundException('Book not found');
+    if (!isValidId) {
+      throw new BadRequestException('Please enter correct id');
     }
+    const findBook = await this.bookModel.findById(id);
+
     return findBook;
   }
 
   // update Book by id
   async updateBookById(id: string, book: Book): Promise<Book> {
+    const isValidId = mongoose.isValidObjectId(id);
+    if (!isValidId) {
+      throw new BadRequestException('Please enter correct id');
+    }
     return await this.bookModel.findByIdAndUpdate(id, book, {
       new: true,
       runValidators: true,
@@ -61,10 +70,11 @@ export class BookService {
 
   // delete book
   async deleteBook(id: string): Promise<Book> {
-    const removeBook = await this.bookModel.findByIdAndDelete(id);
-    if (!removeBook) {
-      throw new NotFoundException('Book not found');
+    const isValidId = mongoose.isValidObjectId(id);
+    if (!isValidId) {
+      throw new BadRequestException('Please enter correct id');
     }
+    const removeBook = await this.bookModel.findByIdAndDelete(id);
     return removeBook;
   }
 }
