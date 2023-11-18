@@ -25,6 +25,8 @@ export class Book {
 
   @Prop()
   category: Category;
+
+  
 }
 
 export const BookSchema = SchemaFactory.createForClass(Book)
