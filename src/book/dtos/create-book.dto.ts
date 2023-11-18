@@ -11,11 +11,11 @@ export class CreateBookDto {
   readonly description: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsNumber()
   readonly price: number;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsString()
   readonly author: string;
 
   @IsNotEmpty()
