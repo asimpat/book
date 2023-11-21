@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schema/user.schema';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { SignUpDto } from './dto/signUp.dto';
@@ -55,23 +55,26 @@ export class AuthService {
     
      async generateResetToken(id: string): Promise<string> {
     const payload = { id };
-    const token = this.jwtService.sign(payload, { expiresIn: '1d' });
+    const token = this.jwtService.signAsync(payload, { expiresIn: '1d' });
     return token;
   
   }
     
-      async verifyResetToken(token: string) {
-    try {
-      const payload = this.jwtService.verify(token);
-      return payload;
-    } catch (error) {
-      // Handle token verification errors
-      throw new Error('Invalid reset token');
-    }
-      }
+    //   async verifyResetToken(token: string) {
+    // try {
+    //   const payload = this.jwtService.verify(token);
+    //   return payload;
+    // } catch (error) {
+    //   // Handle token verification errors
+    //   throw new Error('Invalid reset token');
+    // }
+    //   }
     
   async updatePassword(userId: any, newPassword: string): Promise<void> {
-    await this.userModel.findByIdAndUpdate(userId, { password: newPassword });
+    await this.userModel.findByIdAndUpdate(userId, { password: newPassword }, {
+      new: true,
+      runValidators: true,
+    }).exec();
   }
 
     
@@ -90,20 +93,22 @@ export class AuthService {
     }
     }
 
-    async resetPassword(token: string, password: string) {
+    async resetPassword(token: string, password: string):Promise<void>{
       const userId = this.jwtService.verify(token)
+      console.log(userId);
+      
+   
       if (!userId) {
          throw new UnauthorizedException('Invalid reset token');
       }
 
-    const user = await this.userModel.findById(userId);
-
-    if (!user) {
+         const user = await this.userModel.findById({userId})
+      if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
     // Update the user's password
-    await this.updatePassword(userId, password);
+    return await this.updatePassword(userId, password);
   }
 }
 
