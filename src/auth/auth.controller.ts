@@ -14,30 +14,32 @@ export class AuthController {
   signUp(@Body() signUpDto: SignUpDto): Promise<{ token: string }> {
     return this.authService.signUp(signUpDto);
   }
-    
-    @Get('login')
-    loginUser(@Body() loginDto: LoginUpDto): Promise<{ token: string; }>{
-        return this.authService.loginUser(loginDto)
-    }
 
-    @Get('users')
-    getAllUsers(): Promise<User[]>{
-        return this.userService.getAllUsers()
-    }
+  @Get('login')
+  loginUser(@Body() loginDto: LoginUpDto): Promise<{ token: string }> {
+    return this.authService.loginUser(loginDto);
+  }
 
-    @Get('users/:id')
-    getUserProfile(@Param('id') id: string): Promise<User>{
-        return this.userService.getUserProfile(id)
-    }
+  @Get('users')
+  getAllUsers(): Promise<User[]> {
+    return this.userService.getAllUsers();
+  }
 
-     @Get('forgot')
-    forgotPassword(@Body('email') email: string): Promise<void>{
-        return this.authService.forgotPassword(email)
-     }
-    
-    @Put('reset')
-   resetPassword(@Body('token') token: string, @Body('password') password: string):Promise<void> {
+  @Get('users/:id')
+  getUserProfile(@Param('id') id: string): Promise<User> {
+    return this.userService.getUserProfile(id);
+  }
+
+  @Get('forgot')
+  forgotPassword(@Body('email') email: string): Promise<void> {
+    return this.authService.forgotPassword(email);
+  }
+
+  @Post('reset')
+  resetPassword(
+    @Body('token') token: string,
+    @Body('password') password: string,
+  ): Promise<void> {
     return this.authService.resetPassword(token, password);
-    
   }
 }
