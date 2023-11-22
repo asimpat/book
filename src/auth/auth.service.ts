@@ -34,7 +34,7 @@ export class AuthService {
       password: hashPsaaword,
     });
     if (user.email === signUpDto.email) {
-      throw new UnauthorizedException('User already exsit')
+      throw new UnauthorizedException('User already exsit');
     }
 
     //   assiged jwt token to the user
