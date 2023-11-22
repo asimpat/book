@@ -21,6 +21,4 @@ export class UserService {
 
     return userProfile;
   }
-
-  async getProfile(id: string) {}
 }
