@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, Param, Put } from '@nestjs/common';
+import { Body, Controller, Post, Get, Param } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/signUp.dto';
 import { LoginUpDto } from './dto/login.dto';
@@ -7,8 +7,10 @@ import { UserService } from 'src/user/user.service';
 
 @Controller('auth')
 export class AuthController {
-  // eslint-disable-next-line prettier/prettier
-  constructor(private authService: AuthService, private userService:UserService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UserService,
+  ) {}
 
   @Post('signup')
   signUp(@Body() signUpDto: SignUpDto): Promise<{ token: string }> {
