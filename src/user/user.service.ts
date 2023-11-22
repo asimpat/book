@@ -5,22 +5,19 @@ import { User } from 'src/auth/schema/user.schema';
 
 @Injectable()
 export class UserService {
-     constructor(
-    @InjectModel(User.name) private userModel: Model<User>,
-     ) { }
-    
-    async getAllUsers(): Promise<User[]> { 
-        return await this.userModel.find()
-    }
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-    async getUserProfile(id: string) {
-          const isValidId = mongoose.isValidObjectId(id); 
+  async getAllUsers(): Promise<User[]> {
+    return await this.userModel.find();
+  }
+
+  async getUserProfile(id: string) {
+    const isValidId = mongoose.isValidObjectId(id);
     if (!isValidId) {
       throw new BadRequestException('Please enter correct id');
     }
-        const userProfile = await this.userModel.findById(id)
-        
-        return userProfile;
+    const userProfile = await this.userModel.findById(id);
 
-    }
+    return userProfile;
+  }
 }

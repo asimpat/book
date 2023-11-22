@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schema/user.schema';
-import mongoose, { Model } from 'mongoose';
+import { Model } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { SignUpDto } from './dto/signUp.dto';
@@ -33,6 +33,9 @@ export class AuthService {
       email,
       password: hashPsaaword,
     });
+    if (user.email === signUpDto.email) {
+      throw new UnauthorizedException('User already exsit')
+    }
 
     //   assiged jwt token to the user
     const token = this.jwtService.sign({ id: user._id });
