@@ -8,13 +8,14 @@ export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async getAllUsers(): Promise<User[]> {
-    return await this.userModel.find();
+    const user = await this.userModel.find();
+    return user;
   }
 
-  async getUserProfile(id: string) {
+  async getUserProfile(id: string): Promise<User> {
     const isValidId = mongoose.isValidObjectId(id);
     if (!isValidId) {
-      throw new BadRequestException('Please enter correct id');
+      throw new BadRequestException('id is incorrect, Please enter correct id');
     }
     const userProfile = await this.userModel.findById(id);
 
